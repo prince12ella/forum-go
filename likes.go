@@ -1,59 +1,42 @@
 package handlers
 
 import (
+    "log"
     "net/http"
-
-    "github.com/prince12ella/forum-go/internal/models"
 )
 
-// LikePost gère la requête de like sur un post
+// Fonction pour gérer les likes sur un post
 func LikePost(w http.ResponseWriter, r *http.Request) {
-    // Parse user session from cookie or authorization header
+    // Exemple de logique pour obtenir l'utilisateur à partir de la session
     user := getUserFromSession(r)
 
-    // Parse post ID from request
-    postID := r.FormValue("post_id") // Assuming post_id is passed as a form value
-
-    // Create or update like in database
-    like := models.Like{
+    // Exemple de structure de like
+    like := Like{
         UserID: user.ID,
-        PostID: postID,
-        Type:   models.LikeType,
+        PostID: 1, // Exemple de PostID fixe pour la démonstration
     }
 
-    // Save the like in database (assuming db package handles database operations)
-    err := db.SaveLike(&like)
-    if err != nil {
-        http.Error(w, "Failed to save like", http.StatusInternalServerError)
-        return
-    }
+    // Exemple de logique pour enregistrer le like dans la base de données, etc.
+    log.Printf("Like created: %+v\n", like)
 
-    // Return success response
     w.WriteHeader(http.StatusCreated)
 }
 
-// DislikePost gère la requête de dislike sur un post
-func DislikePost(w http.ResponseWriter, r *http.Request) {
-    // Parse user session from cookie or authorization header
-    user := getUserFromSession(r)
+// Exemple de fonction pour récupérer l'utilisateur à partir de la session (à adapter selon ton besoin réel)
+func getUserFromSession( *http.Request) User {
+    // Implémentation pour récupérer l'utilisateur à partir de la session
+    // Ici, un exemple de retour d'un utilisateur fictif
+    return User{ID: 1, Name: "John Doe"} // À adapter selon ta logique réelle
+}
 
-    // Parse post ID from request
-    postID := r.FormValue("post_id") // Assuming post_id is passed as a form value
+// Structure d'exemple de Like (à adapter selon ton besoin réel)
+type Like struct {
+    UserID int // Supposons que UserID est l'ID de l'utilisateur qui a aimé
+    PostID int // Supposons que PostID est l'ID du post aimé
+}
 
-    // Create or update dislike in database
-    dislike := models.Like{
-        UserID: user.ID,
-        PostID: postID,
-        Type:   models.DislikeType,
-    }
-
-    // Save the dislike in database
-    err := db.SaveLike(&dislike)
-    if err != nil {
-        http.Error(w, "Failed to save dislike", http.StatusInternalServerError)
-        return
-    }
-
-    // Return success response
-    w.WriteHeader(http.StatusCreated)
+// Exemple de structure User (à adapter selon ton besoin réel)
+type User struct {
+    ID   int    // Exemple de champ ID
+    Name string // Exemple de champ Name
 }
